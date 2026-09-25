@@ -138,3 +138,40 @@ def create_quiz_character(game):
         "background": background,
         "scores": scores
     }
+def create_quiz_character_from_scores(game, scores):
+    """Создаёт персонажа по результатам теста из GUI."""
+
+    quiz_type = QUIZ_TYPES.get(game["name"], "fantasy")
+
+    if quiz_type == "cyberpunk":
+        class_tags = CYBERPUNK_CLASS_TAGS
+    else:
+        class_tags = FANTASY_CLASS_TAGS
+
+    character_class = find_best_class(
+        game["id"],
+        scores,
+        class_tags
+    )
+
+    races = get_races(game["id"])
+    backgrounds = get_backgrounds(game["id"])
+
+    race = random.choice(races) if races else None
+    background = random.choice(backgrounds) if backgrounds else None
+
+    subclass = None
+
+    if character_class:
+        subclasses = get_subclasses(character_class["id"])
+
+        if subclasses:
+            subclass = random.choice(subclasses)
+
+    return {
+        "race": race,
+        "class": character_class,
+        "subclass": subclass,
+        "background": background,
+        "scores": scores
+    }
