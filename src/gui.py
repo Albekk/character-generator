@@ -26,6 +26,7 @@ class CharacterGeneratorApp:
 
         self.root.title("Character Generator")
         self.root.geometry("900x600")
+        self.setup_styles()
         self.root.minsize(700, 500)
 
         self.game_types = []
@@ -40,6 +41,142 @@ class CharacterGeneratorApp:
         """Удаляет все элементы текущего экрана."""
         for widget in self.root.winfo_children():
             widget.destroy()
+
+    def setup_styles(self):
+        """Настраивает внешний вид приложения."""
+
+        self.root.configure(bg="#171717")
+
+        style = ttk.Style()
+        style.theme_use("clam")
+
+        # Основной фон
+        style.configure(
+            "TFrame",
+            background="#171717"
+        )
+        style.configure(
+            "Treeview",
+            background="#222222",
+            fieldbackground="#222222",
+            foreground="#E8E8E8",
+            rowheight=28,
+            borderwidth=0,
+            font=("Segoe UI", 10)
+        )
+
+        style.configure(
+            "Treeview.Heading",
+            background="#302A1F",
+            foreground="#D8B65C",
+            font=("Segoe UI", 10, "bold"),
+            padding=6
+        )
+
+        style.map(
+            "Treeview",
+            background=[
+                ("selected", "#4A4028")
+            ],
+            foreground=[
+                ("selected", "#FFFFFF")
+            ]
+        )
+
+        # Обычный текст
+        style.configure(
+            "TLabel",
+            background="#171717",
+            foreground="#E8E8E8",
+            font=("Segoe UI", 11)
+        )
+
+        # Кнопки
+        style.configure(
+            "TButton",
+            background="#292929",
+            foreground="#E8E8E8",
+            font=("Segoe UI", 11),
+            padding=(15, 8),
+            borderwidth=1
+        )
+
+        style.map(
+            "TButton",
+            background=[
+                ("active", "#3A3324"),
+                ("pressed", "#4A4028")
+            ],
+            foreground=[
+                ("active", "#D8B65C")
+            ]
+        )
+
+        # Выпадающие списки
+        style.configure(
+            "TCombobox",
+            fieldbackground="#292929",
+            background="#292929",
+            foreground="#E8E8E8",
+            arrowcolor="#D8B65C",
+            padding=6
+        )
+
+        style.map(
+            "TCombobox",
+            fieldbackground=[
+                ("readonly", "#292929")
+            ],
+            foreground=[
+                ("readonly", "#E8E8E8")
+            ],
+            selectbackground=[
+                ("readonly", "#292929")
+            ],
+            selectforeground=[
+                ("readonly", "#E8E8E8")
+            ]
+        )
+
+        # Поля ввода
+        style.configure(
+            "TEntry",
+            fieldbackground="#292929",
+            foreground="#E8E8E8",
+            insertcolor="#E8E8E8",
+            padding=6
+        )
+
+        # Переключатели квиза
+        style.configure(
+            "TRadiobutton",
+            background="#171717",
+            foreground="#E8E8E8",
+            font=("Segoe UI", 11)
+        )
+
+        style.map(
+            "TRadiobutton",
+            background=[
+                ("active", "#171717")
+            ],
+            foreground=[
+                ("active", "#D8B65C")
+            ]
+        )
+        style.configure(
+            "Title.TLabel",
+            background="#171717",
+            foreground="#D8B65C",
+            font=("Segoe UI", 26, "bold")
+        )
+
+        style.configure(
+            "Subtitle.TLabel",
+            background="#171717",
+            foreground="#AFAFAF",
+            font=("Segoe UI", 12)
+        )
 
     def create_main_menu(self):
         """Создаёт главное меню."""
@@ -56,15 +193,15 @@ class CharacterGeneratorApp:
 
         title = ttk.Label(
             container,
-            text="CHARACTER GENERATOR",
-            font=("Arial", 26, "bold")
+            text="ГЕНЕРАТОР ПЕРСОНАЖЕЙ",
+            style="Title.TLabel"
         )
         title.pack(pady=(80, 10))
 
         subtitle = ttk.Label(
             container,
-            text="Генератор персонажей для ролевых игр",
-            font=("Arial", 12)
+            text="Создайте героя для любимой ролевой игры",
+            style="Title.TLabel"
         )
         subtitle.pack(pady=(0, 50))
 
@@ -118,7 +255,7 @@ class CharacterGeneratorApp:
         title = ttk.Label(
             container,
             text="Создание персонажа",
-            font=("Arial", 22, "bold")
+            style="Title.TLabel"
         )
         title.pack(pady=(15, 20))
 
@@ -240,7 +377,7 @@ class CharacterGeneratorApp:
         title = ttk.Label(
             container,
             text="Мои персонажи",
-            font=("Arial", 22, "bold")
+            style="Title.TLabel"
         )
         title.pack(pady=(10, 20))
 
@@ -250,7 +387,7 @@ class CharacterGeneratorApp:
             ttk.Label(
                 container,
                 text="Сохранённых персонажей пока нет.",
-                font=("Arial", 12)
+                style="Title.TLabel"
             ).pack(pady=30)
 
         else:
@@ -361,7 +498,7 @@ class CharacterGeneratorApp:
         ttk.Label(
             container,
             text="Создание персонажа вручную",
-            font=("Arial", 22, "bold")
+            style="Title.TLabel"
         ).pack(pady=(10, 10))
 
         ttk.Label(
@@ -525,7 +662,7 @@ class CharacterGeneratorApp:
         ttk.Label(
             container,
             text="Тест персонажа",
-            font=("Arial", 22, "bold")
+            style="Title.TLabel"
         ).pack(pady=(20, 10))
 
         ttk.Label(
@@ -718,7 +855,7 @@ class CharacterGeneratorApp:
         title = ttk.Label(
             container,
             text="Ваш персонаж",
-            font=("Arial", 24, "bold")
+            style="Title.TLabel"
         )
         title.pack(pady=(15, 15))
 
