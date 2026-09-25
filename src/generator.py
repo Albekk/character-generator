@@ -4,7 +4,9 @@ from database import (
     get_races,
     get_classes,
     get_subclasses,
-    get_backgrounds
+    get_backgrounds,
+    save_character,
+    get_saved_characters
 )
 
 
@@ -129,3 +131,99 @@ def print_character(game_type, game, character):
         print("Предыстория: отсутствует")
 
     print("==============================")
+
+def ask_to_save_character(game, character):
+    """Предлагает пользователю сохранить персонажа."""
+
+    print()
+    print("Сохранить персонажа в базу данных?")
+    print("1. Да")
+    print("2. Нет")
+
+    while True:
+        choice = input("\nВаш выбор: ")
+
+        if choice == "2":
+            print("Персонаж не сохранён.")
+            return
+
+        if choice == "1":
+            break
+
+        print("Введите 1 или 2.")
+
+    print()
+    name = input("Введите имя персонажа: ").strip()
+
+    while not name:
+        print("Имя не может быть пустым.")
+        name = input("Введите имя персонажа: ").strip()
+
+    race_id = (
+        character["race"]["id"]
+        if character["race"] else None
+    )
+
+    class_id = (
+        character["class"]["id"]
+        if character["class"] else None
+    )
+
+    subclass_id = (
+        character["subclass"]["id"]
+        if character["subclass"] else None
+    )
+
+    background_id = (
+        character["background"]["id"]
+        if character["background"] else None
+    )
+
+    character_id = save_character(
+        game["id"],
+        race_id,
+        class_id,
+        subclass_id,
+        background_id,
+        name
+    )
+
+    if character_id:
+        print()
+        print(f"Персонаж «{name}» сохранён!")
+        print(f"ID персонажа: {character_id}")
+
+def show_saved_characters():
+    """Показывает сохранённых персонажей."""
+
+    characters = get_saved_characters()
+
+    print()
+    print("==============================")
+    print("      МОИ ПЕРСОНАЖИ")
+    print("==============================")
+
+    if not characters:
+        print("Сохранённых персонажей пока нет.")
+        return
+
+    for character in characters:
+        print()
+        print(f"ID: {character['id']}")
+        print(f"Имя: {character['character_name']}")
+        print(f"Игра: {character['game']}")
+        print(f"Раса: {character['race']}")
+        print(f"Класс: {character['class']}")
+
+        if character["subclass"]:
+            print(f"Подкласс: {character['subclass']}")
+        else:
+            print("Подкласс: отсутствует")
+
+        if character["background"]:
+            print(f"Предыстория: {character['background']}")
+        else:
+            print("Предыстория: отсутствует")
+
+        print(f"Создан: {character['created_at']}")
+        print("------------------------------")
