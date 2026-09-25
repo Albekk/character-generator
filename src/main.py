@@ -1,36 +1,31 @@
-from database import (
-    get_game_types,
-    get_games_by_type,
-    get_races,
-    get_classes,
-    get_subclasses,
-    get_backgrounds
+from database import get_game_types, get_games_by_type
+
+from generator import (
+    choose_item,
+    create_manual_character,
+    create_random_character,
+    print_character
 )
 
+from quiz import create_quiz_character
 
-def choose_item(items, title):
-    """Показывает список и возвращает выбранный элемент."""
 
-    if not items:
-        return None
+def choose_creation_mode():
+    """Выбор способа создания персонажа."""
 
     print()
-    print(title)
-
-    for number, item in enumerate(items, start=1):
-        print(f"{number}. {item['name']}")
+    print("Выберите способ создания персонажа:")
+    print("1. Составить вручную")
+    print("2. Пройти тест")
+    print("3. Случайный персонаж")
 
     while True:
-        try:
-            choice = int(input("\nВаш выбор: "))
+        choice = input("\nВаш выбор: ")
 
-            if 1 <= choice <= len(items):
-                return items[choice - 1]
+        if choice in ("1", "2", "3"):
+            return choice
 
-            print("Выберите номер из списка.")
-
-        except ValueError:
-            print("Введите число.")
+        print("Введите 1, 2 или 3.")
 
 
 def main():
@@ -38,7 +33,7 @@ def main():
     print("     CHARACTER GENERATOR")
     print("==============================")
 
-    # Тип игры
+    # Выбор типа игры
     game_type = choose_item(
         get_game_types(),
         "Выберите тип игры:"
@@ -48,7 +43,7 @@ def main():
         print("Типы игр не найдены.")
         return
 
-    # Игра
+    # Выбор игры
     game = choose_item(
         get_games_by_type(game_type["id"]),
         "Выберите игру:"
@@ -58,66 +53,21 @@ def main():
         print("Игры этого типа не найдены.")
         return
 
-    # Раса
-    race = choose_item(
-        get_races(game["id"]),
-        "Выберите расу:"
-    )
+    # Выбор способа создания
+    mode = choose_creation_mode()
 
-    # Класс
-    character_class = choose_item(
-        get_classes(game["id"]),
-        "Выберите класс:"
-    )
+    if mode == "1":
+        character = create_manual_character(game)
 
-    # Подкласс
-    subclass = None
 
-    if character_class is not None:
-        subclasses = get_subclasses(character_class["id"])
+    elif mode == "2":
 
-        if subclasses:
-            subclass = choose_item(
-                subclasses,
-                "Выберите подкласс:"
-            )
+        character = create_quiz_character(game)
 
-    # Предыстория
-    background = choose_item(
-        get_backgrounds(game["id"]),
-        "Выберите предысторию:"
-    )
-
-    # Результат
-    print()
-    print("==============================")
-    print("       ВАШ ПЕРСОНАЖ")
-    print("==============================")
-
-    print(f"Тип игры: {game_type['name']}")
-    print(f"Игра: {game['name']}")
-
-    if race:
-        print(f"Раса: {race['name']}")
     else:
-        print("Раса: отсутствует")
+        character = create_random_character(game)
 
-    if character_class:
-        print(f"Класс: {character_class['name']}")
-    else:
-        print("Класс: отсутствует")
-
-    if subclass:
-        print(f"Подкласс: {subclass['name']}")
-    else:
-        print("Подкласс: отсутствует")
-
-    if background:
-        print(f"Предыстория: {background['name']}")
-    else:
-        print("Предыстория: отсутствует")
-
-    print("==============================")
+    print_character(game_type, game, character)
 
 
 if __name__ == "__main__":
