@@ -10,7 +10,8 @@ def get_connection():
         user="root",
         password="",
         database="character_generator",
-        charset="utf8mb4"
+        charset="utf8mb4",
+        use_pure = True
     )
 
 
